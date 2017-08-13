@@ -1,6 +1,6 @@
 import pygame
 import random
-from os import path
+from os import *
 
 WIDTH = 700
 HEIGHT = 600
@@ -148,7 +148,7 @@ def draw_text(surf, text, size, x, y):
     text_rect.midtop = (x, y)
     surf.blit(text_surface, text_rect)
 
-hdir = os.path.dirname(os.path.abspath(__file__))
+hdir = path.dirname(path.abspath(__file__))
 with open(path.join(hdir,HS_FILE),'w') as f:
     try:
         highscore = int(f.read())
