@@ -5,9 +5,9 @@ from os import path
 WIDTH = 700
 HEIGHT = 600
 FPS = 60
-HS_FILE=('highscore.txt')
+HS_FILE = 'highscore.txt'
 
-bg=pygame.image.load('galgadas.png')
+bg=pygame.image.load('assets/images/galgadas.png')
 # define colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -15,30 +15,30 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
-icon=pygame.image.load('asteroid invasion.png')
-life=pygame.image.load('life.png')
+icon=pygame.image.load('assets/images/asteroid invasion.png')
+life=pygame.image.load('assets/images/life.png')
 pygame.display.set_icon(icon)
 
 
 # initialize pygame and create window
 pygame.init()
 pygame.mixer.init()
-pygame.mixer.music.load('bgspaceshooter.mp3')
+pygame.mixer.music.load('assets/sounds/bgspaceshooter.mp3')
 pygame.mixer.music.play(-1)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 pygame.display.set_caption("asteroid invasion")
 speed=8
 bspeed=12
-pew=pygame.mixer.Sound('pew.wav')
-astrexpl=pygame.mixer.Sound('astrexpl.wav')
+pew=pygame.mixer.Sound('assets/sounds/pew.wav')
+astrexpl=pygame.mixer.Sound('assets/sounds/astrexpl.wav')
 clock = pygame.time.Clock()
 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('player.png')
+        self.image = pygame.image.load('assets/images/player.png')
         self.rect = self.image.get_rect()
         self.radius=30
         self.rect.centerx = WIDTH / 2
@@ -85,7 +85,7 @@ class Player(pygame.sprite.Sprite):
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('meteorBrown_med1.png')
+        self.image = pygame.image.load('assets/images/meteorBrown_med1.png')
         self.rect = self.image.get_rect()
         self.radius = int(self.rect.width * .85 / 2)
         self.rect.x = random.randrange(WIDTH - self.rect.width)
@@ -104,7 +104,7 @@ class Mob(pygame.sprite.Sprite):
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('laserRed.png')
+        self.image = pygame.image.load('assets/images/laserRed.png')
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.centerx = x
@@ -148,12 +148,12 @@ def draw_text(surf, text, size, x, y):
     text_rect.midtop = (x, y)
     surf.blit(text_surface, text_rect)
 
-hdir=path.dirname(__file__)
+hdir = os.path.dirname(os.path.abspath(__file__))
 with open(path.join(hdir,HS_FILE),'w') as f:
     try:
-        highscore=int(f.read())
+        highscore = int(f.read())
     except:
-        highscore=0
+        highscore = 0
 
 def BG():
     screen.fill(WHITE)
@@ -195,7 +195,7 @@ explosion_anim['lg'] = []
 explosion_anim['sm'] = []
 explosion_anim['player'] = []
 for i in range(9):
-    filename = 'regularExplosion0{}.png'.format(i)
+    filename = 'assets/images/regularExplosion0{}.png'.format(i)
     img = pygame.image.load(filename).convert()
     img.set_colorkey(BLACK)
     img_lg = pygame.transform.scale(img, (75, 75))
