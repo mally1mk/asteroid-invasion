@@ -5,7 +5,8 @@ from os import *
 WIDTH = 700
 HEIGHT = 600
 FPS = 60
-HS_FILE = 'highscore.txt'
+
+HS_FILE='highscore.txt'
 
 bg=pygame.image.load('assets/images/galgadas.png')
 # define colors
@@ -261,7 +262,6 @@ while running:
         player.hide()
         player.lives -= 1
     if player.lives==0 and not death_explosion.alive():
-        astrexpl.play()
         game_over = True
         
 
