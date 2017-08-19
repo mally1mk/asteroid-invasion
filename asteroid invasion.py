@@ -6,7 +6,7 @@ WIDTH = 700
 HEIGHT = 600
 FPS = 60
 HS_FILE='highscore.txt'
-
+img_dir = path.join(path.dirname(__file__), 'meteors')
 bg=pygame.image.load('assets/images/galgadas.png')
 # define colors
 WHITE = (255, 255, 255)
@@ -17,23 +17,28 @@ BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 icon=pygame.image.load('assets/images/asteroid invasion.png')
 life=pygame.image.load('assets/images/life.png')
+meteor_images = []
+meteor_list =['meteorBrown_big1.png','meteorBrown_med1.png',
+              'meteorBrown_big2.png','meteorBrown_big3.png',
+              'meteorBrown_med1.png','meteorBrown_med3.png',
+              'meteorBrown_small1.png','meteorBrown_small2.png',
+              'meteorBrown_tiny1.png','meteorBrown_tiny2.png']
 pygame.display.set_icon(icon)
-
-
 # initialize pygame and create window
 pygame.init()
 pygame.mixer.init()
 pygame.mixer.music.load('assets/sounds/bgspaceshooter.mp3')
 pygame.mixer.music.play(-1)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-
 pygame.display.set_caption("asteroid invasion")
 speed=8
 bspeed=12
 pew=pygame.mixer.Sound('assets/sounds/pew.wav')
 astrexpl=pygame.mixer.Sound('assets/sounds/astrexpl.wav')
-clock = pygame.time.Clock()
 
+for meteors in meteor_list:
+    meteor_images.append(pygame.image.load(path.join(img_dir, meteors)).convert())
+clock = pygame.time.Clock()
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -47,9 +52,6 @@ class Player(pygame.sprite.Sprite):
         self.hidden = False
         self.lives=3
         self.hide_timer = pygame.time.get_ticks()
-
-
-        # unhide if hidden
         
     def update(self):
         if self.hidden and pygame.time.get_ticks() - self.hide_timer > 1000:
@@ -68,9 +70,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.right = WIDTH
         if self.rect.left < 0:
             self.rect.left = 0
-
     
-        
     def shoot(self):
         bullet = Bullet(self.rect.centerx, self.rect.top)
         pew.play()
@@ -85,7 +85,9 @@ class Player(pygame.sprite.Sprite):
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('assets/images/meteorBrown_med1.png')
+        self.image_orig = random.choice(meteor_images)
+        self.image_orig.set_colorkey(BLACK)
+        self.image = self.image_orig.copy()
         self.rect = self.image.get_rect()
         self.radius = int(self.rect.width * .85 / 2)
         self.rect.x = random.randrange(WIDTH - self.rect.width)
@@ -149,7 +151,8 @@ def draw_text(surf, text, size, x, y):
     surf.blit(text_surface, text_rect)
 
 hdir=path.dirname(__file__)
-with open(path.join(hdir,HS_FILE),'w') as f:
+
+with open(path.join(hdir,HS_FILE),'a') as f:
     try:
         highscore=int(f.read())
     except:
@@ -184,8 +187,6 @@ def showscreen():
                 if event.key == pygame.K_UP:
                     waiting = False
                    
-
-
 all_sprites = pygame.sprite.Group()
 mobs = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
@@ -202,11 +203,9 @@ for i in range(9):
     explosion_anim['lg'].append(img_lg)
     explosion_anim['player'].append(img)
 
-    
 player = Player()
 all_sprites.add(player)
 
-    
 # Game loop
 running = True
 game_over=True
@@ -225,8 +224,6 @@ while running:
             mobs.add(m)
         score=0
             
-        
-    #print(clock)
     # keep loop running at the right speed
     clock.tick(FPS)
     # Process input (events)
@@ -244,7 +241,7 @@ while running:
     # check to see if a bullet hit a mob
     hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
     for hit in hits:
-        expl = Explosion(hit.rect.center, 'lg')
+        expl = Explosion(hit.rect.center,'lg')
         all_sprites.add(expl)
         m = Mob()
         all_sprites.add(m)
@@ -262,12 +259,10 @@ while running:
         player.lives -= 1
     if player.lives==0 and not death_explosion.alive():
         game_over = True
-        
 
     if score>highscore:
         highscore=score
         
-
     # Draw / render
     BG()
     draw_text(screen,str(player.lives)+'x',18,648,10)
