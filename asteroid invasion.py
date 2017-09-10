@@ -6,10 +6,9 @@ WIDTH = 700
 HEIGHT = 600
 FPS = 60
 
-HS_FILE='highscore.txt'
+HS_FILE='assets/images/highscore.txt'
 hdir=path.dirname(__file__)
 img_dir = path.join(path.dirname(__file__), 'meteors')
-img_dir2=path.join(path.dirname(__file__), 'assets/images/')
 bg=pygame.image.load('assets/images/galgadas.png')
 # define colors
 WHITE = (255, 255, 255)
@@ -29,8 +28,8 @@ meteor_list =['meteorBrown_big1.png','meteorBrown_med1.png',
               'meteorBrown_tiny1.png','meteorBrown_tiny2.png']
 
 powerup_images = {}
-powerup_images['gun'] = pygame.image.load(path.join(img_dir2, 'powerpowerup.png'))
-powerup_images['life'] = pygame.image.load(path.join(img_dir2, 'life.png'))
+powerup_images['gun'] = pygame.image.load( 'assets/images/powerpowerup.png')
+powerup_images['life'] = pygame.image.load('assets/images/life.png')
 pygame.display.set_icon(icon)
 # initialize pygame and create window
 pygame.init()
@@ -106,7 +105,6 @@ class Player(pygame.sprite.Sprite):
         all_sprites.add(sonicbull)
         sonicshot.add(sonicbull)
               
-
     def hide(self):
         self.hidden = True
         self.hide_timer = pygame.time.get_ticks()
@@ -128,7 +126,7 @@ class Mob(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
-        if self.rect.top > HEIGHT + 10 or self.rect.left < -25 or self.rect.right > WIDTH+ 20:
+        if self.rect.top > HEIGHT + 10 or self.rect.left < -125 or self.rect.right > WIDTH+ 125:
             self.rect.x = random.randrange(WIDTH - self.rect.width)
             self.rect.y = random.randrange(-100, -40)
             self.speedy = random.randrange(1, 8)
@@ -275,7 +273,7 @@ for i in range(9):
     img_lg = pygame.transform.scale(img, (75, 75))
     explosion_anim['lg'].append(img_lg)
     filename = 'sonicExplosion0{}.png'.format(i)
-    img = pygame.image.load(path.join(img_dir2, filename))
+    img = pygame.image.load(path.join('assets/images', filename))
     explosion_anim['player'].append(img)
 
 
